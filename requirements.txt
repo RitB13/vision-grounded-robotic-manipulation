@@ -1,0 +1,19 @@
+numpy
+# pybullet
+torch
+openai
+python-dotenv
+gdown
+Pillow
+matplotlib
+imageio
+moviepy
+tqdm
+ftfy
+regex
+tiktoken
+jax
+jaxlib
+flax
+optax
+# git+https://github.com/openai/CLIP.git

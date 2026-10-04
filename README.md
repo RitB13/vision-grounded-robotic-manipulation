@@ -1,2 +1,9 @@
-# vision-grounded-robotic-manipulation
-LLM-powered robotic manipulation system combining vision, natural-language task planning, and PyBullet simulation. The system interprets instructions, grounds them in the visual scene, generates and validates manipulation plans, and executes autonomous pick-and-place tasks with feedback-based replanning.
+# Vision-Grounded LLM Robotic Manipulation
+
+This is the clean Python/VS Code implementation derived from the reference
+repository `FrancescoPisacane/LLM-for-robotic-arm-control`.
+
+The reference clone is kept untouched. This project ports only the reusable
+PyBullet environment and pretrained CLIPort-style manipulation components,
+then adds our own planning, validation, world-model, success-checking, and
+replanning layers.
