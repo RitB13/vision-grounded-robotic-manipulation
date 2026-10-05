@@ -1,0 +1,544 @@
+{
+  "experiment": "multi_step_failure_recovery",
+  "task_instruction": "Pick the blue block and place it on the green block, then pick the red block and place it on the blue block.",
+  "controlled_failure_step": 2,
+  "failure_mode": "movement_failure",
+  "experiment_seed": 300,
+  "initial_world_state": {
+    "objects": [
+      {
+        "name": "blue block",
+        "type": "block",
+        "color": "blue",
+        "position": [
+          -0.019552014197799634,
+          -0.6115869237055824,
+          0.0209893633557113
+        ]
+      },
+      {
+        "name": "green block",
+        "type": "block",
+        "color": "green",
+        "position": [
+          -0.10356987769493761,
+          -0.38717731367254815,
+          0.0209893633557113
+        ]
+      },
+      {
+        "name": "red block",
+        "type": "block",
+        "color": "red",
+        "position": [
+          0.1244367161880999,
+          -0.5396796418299722,
+          0.0209893633557113
+        ]
+      }
+    ],
+    "object_names": [
+      "blue block",
+      "green block",
+      "red block"
+    ]
+  },
+  "initial_plan": {
+    "goal": "Place blue block on green block and red block on blue block.",
+    "actions": [
+      {
+        "type": "pick",
+        "object": "blue block",
+        "target": null
+      },
+      {
+        "type": "place",
+        "object": "blue block",
+        "target": "green block"
+      },
+      {
+        "type": "pick",
+        "object": "red block",
+        "target": null
+      },
+      {
+        "type": "place",
+        "object": "red block",
+        "target": "blue block"
+      }
+    ]
+  },
+  "initial_plan_valid": true,
+  "initial_pairs": [
+    {
+      "pick": "blue block",
+      "place": "green block"
+    },
+    {
+      "pick": "red block",
+      "place": "blue block"
+    }
+  ],
+  "completed_pairs": [
+    {
+      "pick": "blue block",
+      "place": "green block"
+    },
+    {
+      "pick": "red block",
+      "place": "blue block"
+    }
+  ],
+  "steps": [
+    {
+      "step_number": 1,
+      "planned_pair": {
+        "pick": "blue block",
+        "place": "green block"
+      },
+      "instruction": "Pick the blue block and place it on the green block.",
+      "controlled_failure": false,
+      "failure_mode": "none",
+      "failure_injection_metadata": {
+        "enabled": false,
+        "mode": "none",
+        "injected": false,
+        "description": null
+      },
+      "prediction": {
+        "pick_yx": [
+          153,
+          105
+        ],
+        "place_yx": [
+          70,
+          73
+        ],
+        "pick_xyz": [
+          -0.017488807439804077,
+          -0.6116591691970825,
+          0.04451211914420128
+        ],
+        "place_xyz": [
+          -0.10358744859695435,
+          -0.3883408010005951,
+          0.041843220591545105
+        ]
+      },
+      "action": {
+        "pick_name": "blue block",
+        "place_name": "green block",
+        "pick": [
+          -0.017488807439804077,
+          -0.6116591691970825,
+          0.04451211914420128
+        ],
+        "place": [
+          -0.10358744859695435,
+          -0.3883408010005951,
+          0.041843220591545105
+        ]
+      },
+      "reward": 1.0,
+      "done": true,
+      "execution_result": {
+        "success": true,
+        "pick_name": "blue block",
+        "place_name": "green block",
+        "grasp_success": true,
+        "movement_success": true,
+        "placement_success": true,
+        "initial_position": [
+          -0.019552014768123627,
+          -0.6115869283676147,
+          0.02098936401307583
+        ],
+        "lift_position": [
+          -0.016285032033920288,
+          -0.6130415201187134,
+          0.22403113543987274
+        ],
+        "final_position": [
+          -0.10461568832397461,
+          -0.388945609331131,
+          0.06097586080431938
+        ],
+        "target_position": [
+          -0.10688043385744095,
+          -0.386887788772583,
+          0.02098720148205757
+        ],
+        "lift_height": 0.20304177701473236,
+        "pick_displacement": 0.24166899919509888,
+        "placement_xy_error": 0.0030600158497691154,
+        "vertical_error": 0.03998865932226181,
+        "placement_tolerance": 0.035,
+        "reason": "Object was lifted, moved, and placed within the target tolerance.",
+        "action_pick_xyz": [
+          -0.017488807439804077,
+          -0.6116591691970825,
+          0.04451211914420128
+        ],
+        "action_place_xyz": [
+          -0.10358744859695435,
+          -0.3883408010005951,
+          0.041843220591545105
+        ]
+      },
+      "execution_feedback": {
+        "execution_success": true,
+        "failure_type": null,
+        "failed_action": null,
+        "feedback": "The robot successfully picked the blue block and placed it on the green block.",
+        "reason": "Object was lifted, moved, and placed within the target tolerance.",
+        "metrics": {
+          "lift_height": 0.20304177701473236,
+          "pick_displacement": 0.24166899919509888,
+          "placement_xy_error": 0.0030600158497691154,
+          "vertical_error": 0.03998865932226181,
+          "placement_tolerance": 0.035
+        }
+      },
+      "success": true
+    },
+    {
+      "step_number": 2,
+      "planned_pair": {
+        "pick": "red block",
+        "place": "blue block"
+      },
+      "instruction": "Pick the red block and place it on the blue block.",
+      "controlled_failure": true,
+      "failure_mode": "movement_failure",
+      "failure_injection_metadata": {
+        "enabled": true,
+        "mode": "movement_failure",
+        "injected": true,
+        "description": "Place position was replaced with the pick position so the object should be grasped but not moved toward the target.",
+        "original_place": [
+          -0.10358744859695435,
+          -0.3883408010005951,
+          0.08225857466459274
+        ],
+        "modified_place": [
+          0.12780269980430603,
+          -0.5417040586471558,
+          0.044660091400146484
+        ]
+      },
+      "prediction": {
+        "pick_yx": [
+          127,
+          159
+        ],
+        "place_yx": [
+          70,
+          73
+        ],
+        "pick_xyz": [
+          0.12780269980430603,
+          -0.5417040586471558,
+          0.044660091400146484
+        ],
+        "place_xyz": [
+          -0.10358744859695435,
+          -0.3883408010005951,
+          0.08225857466459274
+        ]
+      },
+      "action": {
+        "pick_name": "red block",
+        "place_name": "blue block",
+        "pick": [
+          0.12780269980430603,
+          -0.5417040586471558,
+          0.044660091400146484
+        ],
+        "place": [
+          0.12780269980430603,
+          -0.5417040586471558,
+          0.044660091400146484
+        ]
+      },
+      "reward": 0.0,
+      "done": false,
+      "execution_result": {
+        "success": false,
+        "pick_name": "red block",
+        "place_name": "blue block",
+        "grasp_success": true,
+        "movement_success": false,
+        "placement_success": false,
+        "initial_position": [
+          0.12443671375513077,
+          -0.5396796464920044,
+          0.02098936401307583
+        ],
+        "lift_position": [
+          0.12702952325344086,
+          -0.541423499584198,
+          0.2245609164237976
+        ],
+        "final_position": [
+          0.1256479024887085,
+          -0.5399683117866516,
+          0.020989643409848213
+        ],
+        "target_position": [
+          -0.10477850586175919,
+          -0.3889549970626831,
+          0.060975998640060425
+        ],
+        "lift_height": 0.20357155799865723,
+        "pick_displacement": 0.0012451127404347062,
+        "placement_xy_error": 0.2755019962787628,
+        "vertical_error": -0.03998635709285736,
+        "placement_tolerance": 0.035,
+        "reason": "The object did not move far enough from its initial position.",
+        "action_pick_xyz": [
+          0.12780269980430603,
+          -0.5417040586471558,
+          0.044660091400146484
+        ],
+        "action_place_xyz": [
+          0.12780269980430603,
+          -0.5417040586471558,
+          0.044660091400146484
+        ]
+      },
+      "execution_feedback": {
+        "execution_success": false,
+        "failure_type": "movement_failure",
+        "failed_action": {
+          "type": "place",
+          "object": "red block",
+          "target": "blue block"
+        },
+        "feedback": "The robot successfully grasped and lifted the red block, but failed to move it to the intended target, blue block.",
+        "reason": "The object did not move far enough from its initial position.",
+        "metrics": {
+          "lift_height": 0.20357155799865723,
+          "pick_displacement": 0.0012451127404347062,
+          "placement_xy_error": 0.2755019962787628,
+          "vertical_error": -0.03998635709285736,
+          "placement_tolerance": 0.035
+        }
+      },
+      "success": false,
+      "replan": {
+        "remaining_instruction": "Pick the red block and place it on the blue block.",
+        "required_pairs": [
+          [
+            "red block",
+            "blue block"
+          ]
+        ],
+        "previous_remaining_plan": {
+          "goal": "Complete the remaining manipulation steps.",
+          "actions": [
+            {
+              "type": "pick",
+              "object": "red block",
+              "target": null
+            },
+            {
+              "type": "place",
+              "object": "red block",
+              "target": "blue block"
+            }
+          ]
+        },
+        "replanned_plan": {
+          "goal": "Pick the red block and place it on the blue block.",
+          "actions": [
+            {
+              "type": "pick",
+              "object": "red block",
+              "target": null
+            },
+            {
+              "type": "place",
+              "object": "red block",
+              "target": "blue block"
+            }
+          ]
+        },
+        "validation": {
+          "valid": true,
+          "errors": [],
+          "warnings": [],
+          "validated_actions": [
+            {
+              "type": "pick",
+              "object": "red block",
+              "target": null
+            },
+            {
+              "type": "place",
+              "object": "red block",
+              "target": "blue block"
+            }
+          ]
+        },
+        "attempts": 1
+      }
+    },
+    {
+      "step_number": 2,
+      "planned_pair": {
+        "pick": "red block",
+        "place": "blue block"
+      },
+      "instruction": "Pick the red block and place it on the blue block.",
+      "controlled_failure": false,
+      "recovery_execution": true,
+      "failure_injection_metadata": {
+        "enabled": false,
+        "mode": "none",
+        "injected": false,
+        "description": null
+      },
+      "prediction": {
+        "pick_yx": [
+          127,
+          159
+        ],
+        "place_yx": [
+          70,
+          73
+        ],
+        "pick_xyz": [
+          0.12780269980430603,
+          -0.5417040586471558,
+          0.04204656928777695
+        ],
+        "place_xyz": [
+          -0.10358744859695435,
+          -0.3883408010005951,
+          0.0821181908249855
+        ]
+      },
+      "action": {
+        "pick_name": "red block",
+        "place_name": "blue block",
+        "pick": [
+          0.12780269980430603,
+          -0.5417040586471558,
+          0.04204656928777695
+        ],
+        "place": [
+          -0.10358744859695435,
+          -0.3883408010005951,
+          0.0821181908249855
+        ]
+      },
+      "reward": 1.0,
+      "done": true,
+      "execution_result": {
+        "success": true,
+        "pick_name": "red block",
+        "place_name": "blue block",
+        "grasp_success": true,
+        "movement_success": true,
+        "placement_success": true,
+        "initial_position": [
+          0.12443671375513077,
+          -0.5396796464920044,
+          0.02098936401307583
+        ],
+        "lift_position": [
+          0.12692761421203613,
+          -0.5416167974472046,
+          0.22165928781032562
+        ],
+        "final_position": [
+          -0.10349567234516144,
+          -0.3869081735610962,
+          0.10096637904644012
+        ],
+        "target_position": [
+          -0.10580743104219437,
+          -0.38900211453437805,
+          0.060976844280958176
+        ],
+        "lift_height": 0.20066992938518524,
+        "pick_displacement": 0.2858121991157532,
+        "placement_xy_error": 0.0031191052403301,
+        "vertical_error": 0.03998953476548195,
+        "placement_tolerance": 0.035,
+        "reason": "Object was lifted, moved, and placed within the target tolerance.",
+        "action_pick_xyz": [
+          0.12780269980430603,
+          -0.5417040586471558,
+          0.04204656928777695
+        ],
+        "action_place_xyz": [
+          -0.10358744859695435,
+          -0.3883408010005951,
+          0.0821181908249855
+        ]
+      },
+      "execution_feedback": {
+        "execution_success": true,
+        "failure_type": null,
+        "failed_action": null,
+        "feedback": "The robot successfully picked the red block and placed it on the blue block.",
+        "reason": "Object was lifted, moved, and placed within the target tolerance.",
+        "metrics": {
+          "lift_height": 0.20066992938518524,
+          "pick_displacement": 0.2858121991157532,
+          "placement_xy_error": 0.0031191052403301,
+          "vertical_error": 0.03998953476548195,
+          "placement_tolerance": 0.035
+        }
+      },
+      "success": true
+    }
+  ],
+  "replanning_triggered": true,
+  "replan_valid": true,
+  "replan_attempts": 1,
+  "recovery_attempted": true,
+  "recovery_success": true,
+  "final_success": true,
+  "completed_steps": 2,
+  "final_world_state": {
+    "objects": [
+      {
+        "name": "blue block",
+        "type": "block",
+        "color": "blue",
+        "position": [
+          -0.10580742905305943,
+          -0.3890021195755259,
+          0.060976843156750136
+        ]
+      },
+      {
+        "name": "green block",
+        "type": "block",
+        "color": "green",
+        "position": [
+          -0.10698259476829991,
+          -0.3867406607139184,
+          0.020987314176906767
+        ]
+      },
+      {
+        "name": "red block",
+        "type": "block",
+        "color": "red",
+        "position": [
+          -0.10349566938673845,
+          -0.3869081705646375,
+          0.10096637895010387
+        ]
+      }
+    ],
+    "object_names": [
+      "blue block",
+      "green block",
+      "red block"
+    ]
+  }
+}

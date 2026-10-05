@@ -4,6 +4,7 @@ import numpy as np
 import jax
 import jax.numpy as jnp
 from flax import linen as nn
+from flax.core.frozen_dict import FrozenDict
 from flax.training import checkpoints
 
 
@@ -164,12 +165,10 @@ class TransporterNets(nn.Module):
 
     return pick_out, place_out
 
-#def n_params(params):
-#    if isinstance(params, dict) or isinstance(params, flax.core.frozen_dict.FrozenDict):
-#        return jnp.sum(jnp.int32([n_params(v) for v in params.values()]))
-#    else:
-#        return np.prod(params.shape)
-
 def n_params(params):
-  return jnp.sum(jnp.int32([n_params(v) if isinstance(v, dict) or isinstance(v, flax.core.frozen_dict.FrozenDict) else np.prod(v.shape) for v in params.values()]))
+    """Return the total number of scalar parameters in a Flax parameter tree."""
 
+    if isinstance(params, (dict, FrozenDict)):
+        return sum(n_params(value) for value in params.values())
+
+    return int(np.prod(params.shape))

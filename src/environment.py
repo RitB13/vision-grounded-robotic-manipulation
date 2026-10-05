@@ -6,28 +6,26 @@ import numpy as np
 import pybullet
 import pybullet_data
 
+from .config import (
+    ASSETS_DIR,
+    BOUNDS,
+    PICK_TARGETS,
+    PIXEL_SIZE,
+    PLACE_TARGETS,
+)
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-ASSETS_ROOT = PROJECT_ROOT / "assets"
+ASSETS_ROOT = ASSETS_DIR
 
 
 # ============================================================================
-# GLOBAL CONSTANTS
+# LOCAL ENVIRONMENT CONSTANTS
 # ============================================================================
 
-# Objects that can be picked by the robot.
-PICK_TARGETS = {
-    "blue block": None,
-    "red block": None,
-    "green block": None,
-    "yellow block": None,
-    "orange block": None,
-    "red sphere": None,
-    "blue sphere": None,
-}
-
-
-# Colors used for simulated objects.
+# Object colors are specific to the PyBullet rendering layer and therefore
+# remain local to the environment. Shared task/workspace configuration lives
+# in src/config.py and is imported above.
 COLORS = {
     "blue": (78 / 255, 121 / 255, 167 / 255, 255 / 255),
     "red": (255 / 255, 87 / 255, 89 / 255, 255 / 255),
@@ -36,44 +34,6 @@ COLORS = {
     "orange": (242 / 255, 142 / 255, 43 / 255, 255 / 255),
     "default": (255 / 255, 255 / 255, 255 / 255),
 }
-
-
-# Places where the robot can put objects.
-PLACE_TARGETS = {
-    "blue block": None,
-    "red block": None,
-    "green block": None,
-    "yellow block": None,
-    "orange block": None,
-    "red sphere": None,
-    "blue sphere": None,
-
-    "blue bowl": None,
-    "red bowl": None,
-    "green bowl": None,
-    "yellow bowl": None,
-    "orange bowl": None,
-
-    "top left corner": (-0.25, -0.25, 0),
-    "top right corner": (0.25, -0.25, 0),
-    "middle": (0, -0.5, 0),
-    "bottom left corner": (-0.25, -0.75, 0),
-    "bottom right corner": (0.25, -0.75, 0),
-    "top center": (0, -0.25, 0),
-    "bottom center": (0, -0.75, 0),
-    "left center": (-0.25, -0.5, 0),
-    "right center": (0.25, -0.5, 0),
-}
-
-
-PIXEL_SIZE = 0.00267857
-
-# Robot workspace bounds.
-BOUNDS = np.float32([
-    [-0.3, 0.3],
-    [-0.8, -0.2],
-    [0, 0.15],
-])
 
 
 # Object dimensions.
@@ -274,14 +234,13 @@ class Robotiq2F85:
         return len(pts) > 0
 
     def check_grasp(self):
-        """Check whether the gripper has successfully grasped an object."""
+        """Check whether the gripper opening indicates a grasp."""
 
-        while self.moving():
-            time.sleep(0.001)
-
-        success = self.grasp_width() > 0.01
-
-        return success
+        # The previous implementation called an undefined ``moving()``
+        # helper. Grasp success is already evaluated from the gripper width
+        # elsewhere in the environment, so no undefined motion wait is
+        # necessary here.
+        return self.grasp_width() > 0.01
 
     def grasp_width(self):
         """Return current gripper opening width."""

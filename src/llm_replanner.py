@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from dotenv import load_dotenv
 from groq import Groq
@@ -21,7 +21,8 @@ class LLMTaskReplanner:
         - the current world state
         - the previous symbolic plan
         - execution feedback
-        - optional validation errors from a rejected replan
+        - optional validation errors
+        - the exact manipulation pairs that remain required
 
     It produces a revised symbolic task plan.
 
@@ -65,6 +66,8 @@ You receive:
 - the previous symbolic plan
 - structured execution feedback
 - optional validation errors
+- REQUIRED MANIPULATION PAIRS describing exactly which
+  manipulations remain necessary
 
 Your task is to produce ONE valid revised symbolic plan that still
 satisfies the user's original goal.
@@ -85,6 +88,8 @@ The available primitive actions are:
 
 IMPORTANT RULES:
 
+HIGH-LEVEL SYMBOLIC REASONING ONLY:
+
 - Produce only a high-level symbolic plan.
 - Never output robot coordinates.
 - Never output joint angles.
@@ -93,20 +98,96 @@ IMPORTANT RULES:
 - Never claim that an action has already succeeded.
 - Do not execute the task.
 - Do not use tools.
+
+WORLD-STATE RULES:
+
 - Use only objects present in the supplied world state.
-- Preserve the user's original goal.
 - Do not invent objects.
-- Every place action must be preceded by a pick of the same object
-  that is currently being held.
+- Preserve the user's original goal.
+
+PICK-AND-PLACE RULES:
+
+- Every place action must be preceded by a pick of the same
+  object that is currently being held.
+- A pick action must have target=null.
+- A place action must have a string target.
 - Never place an object twice without picking it again.
-- Do not append duplicate place actions.
-- A normal pick-and-place task should contain exactly:
-    pick object
-    place that same object on the intended target
-- If validation errors are supplied, fix EVERY validation error.
+- Never append duplicate place actions.
+- Never repeat the same manipulation pair unless that pair is
+  explicitly listed as a required manipulation pair.
+- Keep the plan as short as possible.
+
+CRITICAL REQUIRED-PAIR RULE:
+
+The field "required_pairs" is a HARD CONSTRAINT.
+
+If required_pairs is provided and is not empty:
+
+- You MUST output ONLY the manipulation pair(s) listed in
+  required_pairs.
+- Do NOT invent additional manipulation pairs.
+- Do NOT add exploratory actions.
+- Do NOT add recovery actions involving unrelated objects.
+- Do NOT change the target of a required pair.
+- Do NOT repeat a required pair.
+- For each required pair, output exactly:
+      pick <object>
+      place <object> on <target>
+- The object and target names must exactly match the supplied
+  required_pairs.
+- If there is exactly one required pair, the plan must contain
+  exactly two actions: one pick followed immediately by one place.
+- If there are multiple required pairs, output exactly one
+  pick/place pair for each required pair, in the supplied order.
+
+Example:
+
+required_pairs:
+[
+    ["red block", "blue block"]
+]
+
+Correct:
+    pick red block
+    place red block on blue block
+
+Incorrect:
+    pick green block
+    place green block on blue block
+    pick red block
+    place red block on blue block
+
+Incorrect:
+    pick red block
+    place red block on blue block
+    place red block on blue block
+
+Incorrect:
+    pick red block
+    place red block on green block
+
+The deterministic validator will reject any manipulation pair that
+is not required.
+
+VALIDATION ERRORS:
+
+- If validation_errors are supplied, fix EVERY validation error.
 - Do not repeat the exact invalid action sequence.
-- Keep the plan as short as possible while satisfying the goal.
-- The plan will be checked by a separate deterministic validator.
+- Use the required_pairs field as the authoritative description
+  of what manipulation work remains.
+- Validation errors explain why the previous candidate failed;
+  they do NOT authorize adding unrelated manipulation pairs.
+
+EXECUTION FEEDBACK:
+
+- Use execution feedback to understand why the previous physical
+  attempt failed.
+- Replan the remaining symbolic task.
+- Do not claim that the failed action succeeded.
+- Do not invent a different manipulation objective merely because
+  execution failed.
+
+The plan will be checked by a separate deterministic validator.
 
 Return only the structured symbolic plan.
 """.strip()
@@ -157,6 +238,78 @@ Return only the structured symbolic plan.
             "additionalProperties": False
         }
 
+    @staticmethod
+    def _normalize_required_pairs(
+        required_pairs: Optional[
+            List[Tuple[str, str]]
+        ],
+    ) -> List[List[str]]:
+        """
+        Convert required manipulation pairs into a JSON-friendly
+        representation.
+
+        Example:
+            [
+                ("red block", "blue block")
+            ]
+
+        becomes:
+            [
+                ["red block", "blue block"]
+            ]
+        """
+
+        if required_pairs is None:
+            return []
+
+        normalized = []
+
+        for index, pair in enumerate(required_pairs):
+
+            if not isinstance(pair, (list, tuple)):
+                raise TypeError(
+                    f"required_pairs[{index}] must be "
+                    "a list or tuple containing "
+                    "(object, target)."
+                )
+
+            if len(pair) != 2:
+                raise ValueError(
+                    f"required_pairs[{index}] must contain "
+                    "exactly two values: (object, target)."
+                )
+
+            object_name, target_name = pair
+
+            if not isinstance(object_name, str):
+                raise TypeError(
+                    f"required_pairs[{index}][0] must be a string."
+                )
+
+            if not isinstance(target_name, str):
+                raise TypeError(
+                    f"required_pairs[{index}][1] must be a string."
+                )
+
+            if not object_name.strip():
+                raise ValueError(
+                    f"required_pairs[{index}][0] cannot be empty."
+                )
+
+            if not target_name.strip():
+                raise ValueError(
+                    f"required_pairs[{index}][1] cannot be empty."
+                )
+
+            normalized.append(
+                [
+                    object_name,
+                    target_name,
+                ]
+            )
+
+        return normalized
+
     def replan(
         self,
         instruction: str,
@@ -164,6 +317,9 @@ Return only the structured symbolic plan.
         previous_plan: Dict[str, Any],
         execution_feedback: Dict[str, Any],
         validation_errors: Optional[List[str]] = None,
+        required_pairs: Optional[
+            List[Tuple[str, str]]
+        ] = None,
     ) -> Dict[str, Any]:
 
         if not instruction or not instruction.strip():
@@ -189,12 +345,28 @@ Return only the structured symbolic plan.
         if validation_errors is None:
             validation_errors = []
 
+        if not isinstance(validation_errors, list):
+            raise TypeError(
+                "validation_errors must be a list."
+            )
+
+        normalized_required_pairs = (
+            self._normalize_required_pairs(
+                required_pairs
+            )
+        )
+
         user_prompt = {
             "original_instruction": instruction,
             "world_state": world_state,
             "previous_plan": previous_plan,
             "execution_feedback": execution_feedback,
             "validation_errors": validation_errors,
+
+            # This is the important addition.
+            # It explicitly tells the LLM which manipulation
+            # pairs remain and prevents unrelated recovery actions.
+            "required_pairs": normalized_required_pairs,
         }
 
         response = self.client.chat.completions.create(
@@ -243,7 +415,9 @@ Return only the structured symbolic plan.
         return plan
 
     @staticmethod
-    def _basic_validate_plan(plan: Dict[str, Any]) -> None:
+    def _basic_validate_plan(
+        plan: Dict[str, Any]
+    ) -> None:
 
         if not isinstance(plan, dict):
             raise ValueError(
@@ -270,7 +444,9 @@ Return only the structured symbolic plan.
                 "'actions' must be a list."
             )
 
-        for index, action in enumerate(plan["actions"]):
+        for index, action in enumerate(
+            plan["actions"]
+        ):
 
             if not isinstance(action, dict):
                 raise ValueError(
@@ -399,8 +575,12 @@ if __name__ == "__main__":
     }
 
     validation_errors = [
-        "Action 2 is a place action but no object has been picked.",
-        "Object 'blue block' is placed multiple times without being picked again.",
+        "Object 'blue block' is placed multiple times "
+        "without being picked again.",
+    ]
+
+    required_pairs = [
+        ("blue block", "green block")
     ]
 
     plan = replanner.replan(
@@ -409,6 +589,7 @@ if __name__ == "__main__":
         previous_plan=previous_plan,
         execution_feedback=execution_feedback,
         validation_errors=validation_errors,
+        required_pairs=required_pairs,
     )
 
     print("\nReplanned task plan:")

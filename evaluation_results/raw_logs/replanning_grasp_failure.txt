@@ -1,0 +1,474 @@
+
+
+======================================================================
+MULTI-STEP LLM REPLANNING EXPERIMENT
+======================================================================
+
+Task:
+  Pick the blue block and place it on the green block, then pick the red block and place it on the blue block.
+
+Controlled failure:
+  Physical step 2
+  Failure mode: grasp_failure
+
+======================================================================
+LOADING CLIPORT
+======================================================================
+CLIPort loaded.
+
+======================================================================
+INITIALIZING ENVIRONMENT
+======================================================================
+Experiment seed: 100
+Environment initialized.
+
+======================================================================
+BUILDING INITIAL WORLD STATE
+======================================================================
+
+Initial world state:
+  blue block: type=block, color=blue, position=[0.01736093742063339, -0.5886481357684182, 0.020989363355711305]
+  green block: type=block, color=green, position=[-0.030194006289932202, -0.3620854271521624, 0.0209893633557113]
+  red block: type=block, color=red, position=[-0.19811351354012205, -0.6513681961169289, 0.0209893633557113]
+
+======================================================================
+GENERATING INITIAL PLAN
+======================================================================
+
+Initial LLM plan:
+{
+  "goal": "Place blue block on green block, then place red block on blue block.",
+  "actions": [
+    {
+      "type": "pick",
+      "object": "blue block",
+      "target": null
+    },
+    {
+      "type": "place",
+      "object": "blue block",
+      "target": "green block"
+    },
+    {
+      "type": "pick",
+      "object": "red block",
+      "target": null
+    },
+    {
+      "type": "place",
+      "object": "red block",
+      "target": "blue block"
+    }
+  ]
+}
+
+======================================================================
+VALIDATING INITIAL PLAN
+======================================================================
+{
+  "valid": true,
+  "errors": [],
+  "warnings": [],
+  "validated_actions": [
+    {
+      "type": "pick",
+      "object": "blue block",
+      "target": null
+    },
+    {
+      "type": "place",
+      "object": "blue block",
+      "target": "green block"
+    },
+    {
+      "type": "pick",
+      "object": "red block",
+      "target": null
+    },
+    {
+      "type": "place",
+      "object": "red block",
+      "target": "blue block"
+    }
+  ]
+}
+
+Initial plan accepted.
+
+Initial manipulation pairs:
+  Step 1: blue block -> green block
+  Step 2: red block -> blue block
+
+======================================================================
+PHYSICAL STEP 1
+======================================================================
+Semantic instruction: Pick the blue block and place it on the green block.
+
+Running CLIPort...
+
+CLIPort prediction:
+  pick pixel : (145, 119)
+  pick XYZ   : [ 0.02017936 -0.5901345   0.04830936]
+  place pixel: (61, 100)
+  place XYZ  : [-0.03094172 -0.36412558  0.04109095]
+
+Using normal CLIPort coordinates. No failure injected.
+
+Executing robot action...
+
+Task result:
+  success: True
+  pick_name: blue block
+  place_name: green block
+  grasp_success: True
+  movement_success: True
+  placement_success: True
+  initial_position: [0.017360936850309372, -0.5886481404304504, 0.02098936401307583]
+  lift_position: [0.01888003945350647, -0.5902506709098816, 0.22774341702461243]
+  final_position: [-0.03242766857147217, -0.3645617961883545, 0.06097666546702385]
+  target_position: [-0.03084014542400837, -0.36173611879348755, 0.02098875865340233]
+  lift_height: 0.20675405859947205
+  pick_displacement: 0.23300768435001373
+  placement_xy_error: 0.003241092897951603
+  vertical_error: 0.03998790681362152
+  placement_tolerance: 0.035
+  reason: Object was lifted, moved, and placed within the target tolerance.
+  action_pick_xyz: [0.02017936110496521, -0.5901345014572144, 0.048309363424777985]
+  action_place_xyz: [-0.03094172477722168, -0.3641255795955658, 0.0410909466445446]
+
+Structured execution feedback:
+{
+  "execution_success": true,
+  "failure_type": null,
+  "failed_action": null,
+  "feedback": "The robot successfully picked the blue block and placed it on the green block.",
+  "reason": "Object was lifted, moved, and placed within the target tolerance.",
+  "metrics": {
+    "lift_height": 0.20675405859947205,
+    "pick_displacement": 0.23300768435001373,
+    "placement_xy_error": 0.003241092897951603,
+    "vertical_error": 0.03998790681362152,
+    "placement_tolerance": 0.035
+  }
+}
+
+STEP 1 SUCCEEDED
+
+World state after successful step:
+  blue block: type=block, color=blue, position=[-0.03242766896983439, -0.36456178498336533, 0.060976665694168826]
+  green block: type=block, color=green, position=[-0.030840145133762452, -0.36173610610706813, 0.02098875878368804]
+  red block: type=block, color=red, position=[-0.1981172290816899, -0.6513064674099543, 0.02098936346346014]
+
+======================================================================
+PHYSICAL STEP 2
+======================================================================
+Semantic instruction: Pick the red block and place it on the blue block.
+
+Running CLIPort...
+
+CLIPort prediction:
+  pick pixel : (168, 38)
+  pick XYZ   : [-0.19775786 -0.65201795  0.04392883]
+  place pixel: (61, 100)
+  place XYZ  : [-0.03094172 -0.36412558  0.08697357]
+
+CONTROLLED FAILURE INJECTION
+Failure mode: grasp_failure
+
+Current object positions used for failure injection:
+  blue block: [-0.03242766896983439, -0.36456178498336533, 0.060976665694168826]
+  green block: [-0.030840145133762452, -0.36173610610706813, 0.02098875878368804]
+  red block: [-0.1981172290816899, -0.6513064674099543, 0.02098936346346014]
+
+Failure injection metadata:
+{
+  "enabled": true,
+  "mode": "grasp_failure",
+  "injected": true,
+  "description": "Pick position was moved to a dynamically selected empty workspace location that is separated from the known objects. This is intended to produce a clean grasp failure without intentionally contacting another object.",
+  "original_pick": [
+    -0.19775785505771637,
+    -0.6520179510116577,
+    0.043928831815719604
+  ],
+  "modified_pick": [
+    -0.27499999999999997,
+    -0.775,
+    0.043928831815719604
+  ],
+  "safe_margin": 0.08,
+  "object_positions_used": {
+    "blue block": [
+      -0.03242766896983439,
+      -0.36456178498336533,
+      0.060976665694168826
+    ],
+    "green block": [
+      -0.030840145133762452,
+      -0.36173610610706813,
+      0.02098875878368804
+    ],
+    "red block": [
+      -0.1981172290816899,
+      -0.6513064674099543,
+      0.02098936346346014
+    ]
+  }
+}
+Injected pick XYZ: [-0.27499999999999997, -0.775, 0.043928831815719604]
+Injected place XYZ: [-0.03094172 -0.36412558  0.08697357]
+
+Executing robot action...
+
+Task result:
+  success: False
+  pick_name: red block
+  place_name: blue block
+  grasp_success: False
+  movement_success: False
+  placement_success: False
+  initial_position: [-0.19811351597309113, -0.6513682007789612, 0.02098936401307583]
+  lift_position: [-0.19811896979808807, -0.651277482509613, 0.02098936401307583]
+  final_position: [-0.19812121987342834, -0.6512399315834045, 0.02098936401307583]
+  target_position: [-0.04503903537988663, -0.3654851019382477, 0.020989365875720978]
+  lift_height: 0.0
+  pick_displacement: 0.000128500338178128
+  placement_xy_error: 0.3241758346557617
+  vertical_error: -1.862645149230957e-09
+  placement_tolerance: 0.035
+  reason: The object was not lifted enough to confirm a successful grasp.
+  action_pick_xyz: [-0.2750000059604645, -0.7749999761581421, 0.043928831815719604]
+  action_place_xyz: [-0.03094172477722168, -0.3641255795955658, 0.08697357028722763]
+
+Structured execution feedback:
+{
+  "execution_success": false,
+  "failure_type": "grasp_failure",
+  "failed_action": {
+    "type": "pick",
+    "object": "red block",
+    "target": null
+  },
+  "feedback": "The robot failed to grasp the red block.",
+  "reason": "The object was not lifted enough to confirm a successful grasp.",
+  "metrics": {
+    "lift_height": 0.0,
+    "pick_displacement": 0.000128500338178128,
+    "placement_xy_error": 0.3241758346557617,
+    "vertical_error": -1.862645149230957e-09,
+    "placement_tolerance": 0.035
+  }
+}
+
+STEP 2 FAILED
+
+======================================================================
+UPDATING WORLD STATE AFTER FAILURE
+======================================================================
+
+Current world state:
+  blue block: type=block, color=blue, position=[-0.04503903363306123, -0.36548511070255674, 0.02098936653327264]
+  green block: type=block, color=green, position=[-0.002507056164915975, -0.3623574379054029, 0.02098944035412889]
+  red block: type=block, color=red, position=[-0.1981212193452184, -0.651239946344267, 0.02098936343755638]
+
+Remaining task given to the replanner:
+  Pick the red block and place it on the blue block.
+
+Required manipulation pairs:
+  red block -> blue block
+
+Previous remaining plan:
+{
+  "goal": "Complete the remaining manipulation steps.",
+  "actions": [
+    {
+      "type": "pick",
+      "object": "red block",
+      "target": null
+    },
+    {
+      "type": "place",
+      "object": "red block",
+      "target": "blue block"
+    }
+  ]
+}
+
+======================================================================
+LLM REPLANNING
+======================================================================
+
+Plan repair attempt 1 / 3
+
+Candidate replanned task:
+{
+  "goal": "Pick the red block and place it on the blue block.",
+  "actions": [
+    {
+      "type": "pick",
+      "object": "red block",
+      "target": null
+    },
+    {
+      "type": "place",
+      "object": "red block",
+      "target": "blue block"
+    }
+  ]
+}
+
+Validation result:
+{
+  "valid": true,
+  "errors": [],
+  "warnings": [],
+  "validated_actions": [
+    {
+      "type": "pick",
+      "object": "red block",
+      "target": null
+    },
+    {
+      "type": "place",
+      "object": "red block",
+      "target": "blue block"
+    }
+  ]
+}
+
+REPLANNED PLAN PASSED VALIDATION
+
+Final validated replan:
+{
+  "goal": "Pick the red block and place it on the blue block.",
+  "actions": [
+    {
+      "type": "pick",
+      "object": "red block",
+      "target": null
+    },
+    {
+      "type": "place",
+      "object": "red block",
+      "target": "blue block"
+    }
+  ]
+}
+
+Replanned physical pairs:
+  1: red block -> blue block
+
+======================================================================
+EXECUTING RECOVERY PLAN
+======================================================================
+
+======================================================================
+PHYSICAL STEP 2
+======================================================================
+Semantic instruction: Pick the red block and place it on the blue block.
+
+Running CLIPort...
+
+CLIPort prediction:
+  pick pixel : (168, 38)
+  pick XYZ   : [-0.19775786 -0.65201795  0.04397684]
+  place pixel: (61, 95)
+  place XYZ  : [-0.04439461 -0.36412558  0.04329062]
+
+Using normal CLIPort coordinates. No failure injected.
+
+Executing robot action...
+
+Task result:
+  success: True
+  pick_name: red block
+  place_name: blue block
+  grasp_success: True
+  movement_success: True
+  placement_success: True
+  initial_position: [-0.19811351597309113, -0.6513682007789612, 0.02098936401307583]
+  lift_position: [-0.19681675732135773, -0.6525436043739319, 0.2236221879720688]
+  final_position: [-0.044579729437828064, -0.36487269401550293, 0.060977622866630554]
+  target_position: [-0.04283039644360542, -0.36489206552505493, 0.02098887786269188]
+  lift_height: 0.2026328295469284
+  pick_displacement: 0.32749253511428833
+  placement_xy_error: 0.0017494402127340436
+  vertical_error: 0.039988745003938675
+  placement_tolerance: 0.035
+  reason: Object was lifted, moved, and placed within the target tolerance.
+  action_pick_xyz: [-0.19775785505771637, -0.6520179510116577, 0.04397683963179588]
+  action_place_xyz: [-0.044394612312316895, -0.3641255795955658, 0.04329061880707741]
+
+Recovery execution feedback:
+{
+  "execution_success": true,
+  "failure_type": null,
+  "failed_action": null,
+  "feedback": "The robot successfully picked the red block and placed it on the blue block.",
+  "reason": "Object was lifted, moved, and placed within the target tolerance.",
+  "metrics": {
+    "lift_height": 0.2026328295469284,
+    "pick_displacement": 0.32749253511428833,
+    "placement_xy_error": 0.0017494402127340436,
+    "vertical_error": 0.039988745003938675,
+    "placement_tolerance": 0.035
+  }
+}
+
+======================================================================
+RECOVERY EXECUTION SUCCEEDED
+======================================================================
+
+Final world state after recovery:
+  blue block: type=block, color=blue, position=[-0.042830398267935374, -0.36489206452909445, 0.020988878126339528]
+  green block: type=block, color=green, position=[-0.0016030066370156897, -0.3623896096032955, 0.020989999854262534]
+  red block: type=block, color=red, position=[-0.04457973089610159, -0.3648726981464108, 0.06097762363960536]
+
+No remaining manipulation steps.
+
+
+======================================================================
+MULTI-STEP EXPERIMENT SUMMARY
+======================================================================
+Initial plan valid      : True
+Initial steps           : 2
+Completed steps         : 2 / 2
+Failure mode            : grasp_failure
+Replanning triggered    : True
+Replan valid            : True
+Replan attempts         : 1
+Recovery attempted      : True
+Recovery success        : True
+Final success           : True
+
+Converting experiment log to JSON-safe format...
+
+Experiment result saved to:
+  replanning_experiment_result.json
+starting thread 0
+started testThreads thread 0 with threadHandle 000000000000032C
+argc=2
+argv[0] = --unused
+argv[1] = --start_demo_name=Physics Server
+ExampleBrowserThreadFunc started
+Version = 4.6.0 Compatibility Profile Context 22.20.44.221025
+Vendor = ATI Technologies Inc.
+Renderer = AMD Radeon(TM) Vega 8 Graphics
+b3Printf: Selected demo: Physics Server
+starting thread 0
+started MotionThreads thread 0 with threadHandle 00000000000009D4
+MotionThreadFunc thread started
+numActiveThreads = 0
+stopping threads
+Thread with taskId 0 with handle 00000000000009D4 exiting
+Thread TERMINATED
+finished
+numActiveThreads = 0
+btShutDownExampleBrowser stopping threads
+Thread with taskId 0 with handle 000000000000032C exiting
+Thread TERMINATED
+
+pybullet build time: Oct  3 2026 23:55:44
+WARNING:absl:Tensorflow library not found, tensorflow.io.gfile operations will use native shim calls. GCS paths (i.e. 'gs://...') cannot be accessed.
+D:\vision-grounded-robotic-manipulation\.venv\Lib\site-packages\torch\jit\_serialization.py:176: FutureWarning: `torch.jit.load` is deprecated. Please switch to `torch.export`.
+  warnings.warn(

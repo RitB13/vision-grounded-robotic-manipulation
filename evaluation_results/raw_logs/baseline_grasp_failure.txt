@@ -1,0 +1,254 @@
+
+======================================================================
+BASELINE FAILURE EVALUATION
+======================================================================
+
+Task:
+  Pick the blue block and place it on the green block, then pick the red block and place it on the blue block.
+
+Baseline configuration:
+  Failure mode: grasp_failure
+  Failure step: 2
+  Replanning: DISABLED
+
+======================================================================
+INITIALIZING ENVIRONMENT
+======================================================================
+Environment object created.
+
+======================================================================
+LOADING CLIPORT
+======================================================================
+CLIPort loaded.
+
+======================================================================
+RESETTING ENVIRONMENT
+======================================================================
+Experiment seed: 100
+Environment initialized.
+
+======================================================================
+BUILDING INITIAL WORLD STATE
+======================================================================
+
+Current world state:
+  blue block: type=block, color=blue, position=[0.01736093742063339, -0.5886481357684182, 0.020989363355711305]
+  green block: type=block, color=green, position=[-0.030194006289932202, -0.3620854271521624, 0.0209893633557113]
+  red block: type=block, color=red, position=[-0.19811351354012205, -0.6513681961169289, 0.0209893633557113]
+
+======================================================================
+GENERATING INITIAL PLAN
+======================================================================
+
+Initial LLM plan:
+{
+  "goal": "Place blue block on green block, then place red block on blue block.",
+  "actions": [
+    {
+      "type": "pick",
+      "object": "blue block",
+      "target": null
+    },
+    {
+      "type": "place",
+      "object": "blue block",
+      "target": "green block"
+    },
+    {
+      "type": "pick",
+      "object": "red block",
+      "target": null
+    },
+    {
+      "type": "place",
+      "object": "red block",
+      "target": "blue block"
+    }
+  ]
+}
+
+======================================================================
+VALIDATING INITIAL PLAN
+======================================================================
+{
+  "valid": true,
+  "errors": [],
+  "warnings": [],
+  "validated_actions": [
+    {
+      "type": "pick",
+      "object": "blue block",
+      "target": null
+    },
+    {
+      "type": "place",
+      "object": "blue block",
+      "target": "green block"
+    },
+    {
+      "type": "pick",
+      "object": "red block",
+      "target": null
+    },
+    {
+      "type": "place",
+      "object": "red block",
+      "target": "blue block"
+    }
+  ]
+}
+
+✅ Initial plan accepted.
+
+Initial manipulation pairs:
+  Step 1: blue block -> green block
+  Step 2: red block -> blue block
+
+======================================================================
+PHYSICAL STEP 1
+======================================================================
+Semantic instruction: Pick the blue block and place it on the green block.
+
+Running CLIPort...
+
+CLIPort prediction:
+  pick pixel : (145, 119)
+  pick XYZ   : [ 0.02017936 -0.5901345   0.04581929]
+  place pixel: (60, 100)
+  place XYZ  : [-0.03094172 -0.361435    0.04120257]
+
+No failure injected. Using normal CLIPort action.
+
+Executing robot action...
+
+Execution result:
+  Reward: 1.0
+  Task success: True
+
+Task result:
+  success: True
+  pick_name: blue block
+  place_name: green block
+  grasp_success: True
+  movement_success: True
+  placement_success: True
+  initial_position: [0.017360936850309372, -0.5886481404304504, 0.02098936401307583]
+  lift_position: [0.021105490624904633, -0.5902120471000671, 0.22508294880390167]
+  final_position: [-0.03323489800095558, -0.36185169219970703, 0.060977473855018616]
+  target_position: [-0.033725932240486145, -0.3638240098953247, 0.02098877727985382]
+  lift_height: 0.2040935903787613
+  pick_displacement: 0.23578722774982452
+  placement_xy_error: 0.0020325235091149807
+  vertical_error: 0.039988696575164795
+  placement_tolerance: 0.035
+  reason: Object was lifted, moved, and placed within the target tolerance.
+  action_pick_xyz: [0.02017936110496521, -0.5901345014572144, 0.04581928625702858]
+  action_place_xyz: [-0.03094172477722168, -0.3614349961280823, 0.041202571243047714]
+
+✅ STEP 1 SUCCEEDED
+
+World state after successful step:
+
+Current world state:
+  blue block: type=block, color=blue, position=[-0.033234896203971055, -0.3618516855429253, 0.060977474136166075]
+  green block: type=block, color=green, position=[-0.033725931808802484, -0.3638240149961123, 0.020988776421070766]
+  red block: type=block, color=red, position=[-0.19811722622878883, -0.6513065148842689, 0.020989363463478742]
+
+======================================================================
+PHYSICAL STEP 2
+======================================================================
+Semantic instruction: Pick the red block and place it on the blue block.
+
+Running CLIPort...
+
+CLIPort prediction:
+  pick pixel : (168, 38)
+  pick XYZ   : [-0.19775786 -0.65201795  0.0468984 ]
+  place pixel: (60, 99)
+  place XYZ  : [-0.03363231 -0.361435    0.08307014]
+
+⚠️ CONTROLLED FAILURE INJECTION
+Failure mode: grasp_failure
+Description: Pick position was moved to a dynamically selected empty workspace location that is separated from the known objects. This is intended to produce a clean grasp failure without intentionally contacting another object.
+Original pick XYZ: [-0.19775785505771637, -0.6520179510116577, 0.04689839854836464]
+Modified pick XYZ: [-0.27499999999999997, -0.775, 0.04689839854836464]
+
+Executing robot action...
+
+Execution result:
+  Reward: 0.0
+  Task success: False
+
+Task result:
+  success: False
+  pick_name: red block
+  place_name: blue block
+  grasp_success: False
+  movement_success: False
+  placement_success: False
+  initial_position: [-0.19811351597309113, -0.6513682007789612, 0.02098936401307583]
+  lift_position: [-0.19811896979808807, -0.6512774229049683, 0.02098936401307583]
+  final_position: [-0.19812121987342834, -0.651239812374115, 0.02098936401307583]
+  target_position: [0.014014218933880329, -0.37142735719680786, 0.02098936215043068]
+  lift_height: 0.0
+  pick_displacement: 0.00012861932918895036
+  placement_xy_error: 0.3511359393596649
+  vertical_error: 1.862645149230957e-09
+  placement_tolerance: 0.035
+  reason: The object was not lifted enough to confirm a successful grasp.
+  action_pick_xyz: [-0.2750000059604645, -0.7749999761581421, 0.04689839854836464]
+  action_place_xyz: [-0.0336323082447052, -0.3614349961280823, 0.08307014405727386]
+
+❌ STEP 2 FAILED
+
+======================================================================
+BASELINE STOPS AFTER FAILURE
+======================================================================
+
+Replanning is DISABLED for this experiment.
+No recovery attempt will be made.
+
+======================================================================
+BASELINE EXPERIMENT SUMMARY
+======================================================================
+Failure mode           : grasp_failure
+Failure step           : 2
+Initial plan valid     : True
+Initial steps          : 2
+Completed steps        : 1 / 2
+Failure occurred       : True
+Replanning used        : False
+Recovery attempted     : False
+Task success           : False
+
+Converting experiment log to JSON-safe format...
+
+Experiment result saved to:
+  baseline_experiment_result.json
+starting thread 0
+started testThreads thread 0 with threadHandle 00000000000003C8
+argc=2
+argv[0] = --unused
+argv[1] = --start_demo_name=Physics Server
+ExampleBrowserThreadFunc started
+Version = 4.6.0 Compatibility Profile Context 22.20.44.221025
+Vendor = ATI Technologies Inc.
+Renderer = AMD Radeon(TM) Vega 8 Graphics
+b3Printf: Selected demo: Physics Server
+starting thread 0
+started MotionThreads thread 0 with threadHandle 00000000000009D8
+MotionThreadFunc thread started
+numActiveThreads = 0
+stopping threads
+Thread with taskId 0 with handle 00000000000009D8 exiting
+Thread TERMINATED
+finished
+numActiveThreads = 0
+btShutDownExampleBrowser stopping threads
+Thread with taskId 0 with handle 00000000000003C8 exiting
+Thread TERMINATED
+
+pybullet build time: Oct  3 2026 23:55:44
+WARNING:absl:Tensorflow library not found, tensorflow.io.gfile operations will use native shim calls. GCS paths (i.e. 'gs://...') cannot be accessed.
+D:\vision-grounded-robotic-manipulation\.venv\Lib\site-packages\torch\jit\_serialization.py:176: FutureWarning: `torch.jit.load` is deprecated. Please switch to `torch.export`.
+  warnings.warn(

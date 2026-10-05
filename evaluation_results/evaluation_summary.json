@@ -1,0 +1,397 @@
+{
+  "summary": {
+    "paired_initial_scene_matches": {
+      "grasp_failure": true,
+      "placement_failure": true,
+      "movement_failure": true
+    },
+    "all_initial_scenes_match": true,
+    "generated_at": "2026-10-05T14:47:35.495704",
+    "number_of_experiments": 6,
+    "baseline_experiments": 3,
+    "replanning_experiments": 3,
+    "baseline_task_success_rate": 0.0,
+    "replanning_task_success_rate": 1.0,
+    "replanning_recovery_success_rate": 1.0,
+    "baseline_average_completed_steps": 1.0,
+    "replanning_average_completed_steps": 2.0,
+    "replanning_average_attempts": 1.0
+  },
+  "experiments": [
+    {
+      "condition": "baseline",
+      "experiment_seed": 100,
+      "initial_world_state": {
+        "objects": [
+          {
+            "name": "blue block",
+            "type": "block",
+            "color": "blue",
+            "position": [
+              0.01736093742063339,
+              -0.5886481357684182,
+              0.020989363355711305
+            ]
+          },
+          {
+            "name": "green block",
+            "type": "block",
+            "color": "green",
+            "position": [
+              -0.030194006289932202,
+              -0.3620854271521624,
+              0.0209893633557113
+            ]
+          },
+          {
+            "name": "red block",
+            "type": "block",
+            "color": "red",
+            "position": [
+              -0.19811351354012205,
+              -0.6513681961169289,
+              0.0209893633557113
+            ]
+          }
+        ],
+        "object_names": [
+          "blue block",
+          "green block",
+          "red block"
+        ]
+      },
+      "failure_mode": "grasp_failure",
+      "failure_step": 2,
+      "return_code": 0,
+      "process_success": true,
+      "initial_plan_valid": true,
+      "initial_steps": 2,
+      "completed_steps": 1,
+      "failure_occurred": true,
+      "replanning_used": false,
+      "recovery_attempted": false,
+      "task_success": false,
+      "json_result_available": true,
+      "grasp_success": false,
+      "movement_success": false,
+      "placement_success": false,
+      "placement_xy_error": 0.3511359393596649,
+      "lift_height": 0.0,
+      "pick_displacement": 0.00012861932918895036
+    },
+    {
+      "condition": "baseline",
+      "experiment_seed": 200,
+      "initial_world_state": {
+        "objects": [
+          {
+            "name": "blue block",
+            "type": "block",
+            "color": "blue",
+            "position": [
+              0.1790518785010843,
+              -0.6093769026866006,
+              0.020989363355711305
+            ]
+          },
+          {
+            "name": "green block",
+            "type": "block",
+            "color": "green",
+            "position": [
+              0.03776702155580814,
+              -0.5286723924746561,
+              0.020989363355711305
+            ]
+          },
+          {
+            "name": "red block",
+            "type": "block",
+            "color": "red",
+            "position": [
+              -0.05703157315740294,
+              -0.3361179484000262,
+              0.0209893633557113
+            ]
+          }
+        ],
+        "object_names": [
+          "blue block",
+          "green block",
+          "red block"
+        ]
+      },
+      "failure_mode": "placement_failure",
+      "failure_step": 2,
+      "return_code": 0,
+      "process_success": true,
+      "initial_plan_valid": true,
+      "initial_steps": 2,
+      "completed_steps": 1,
+      "failure_occurred": true,
+      "replanning_used": false,
+      "recovery_attempted": false,
+      "task_success": false,
+      "json_result_available": true,
+      "grasp_success": true,
+      "movement_success": true,
+      "placement_success": false,
+      "placement_xy_error": 0.07914654910564423,
+      "lift_height": 0.2038576602935791,
+      "pick_displacement": 0.2608150541782379
+    },
+    {
+      "condition": "baseline",
+      "experiment_seed": 300,
+      "initial_world_state": {
+        "objects": [
+          {
+            "name": "blue block",
+            "type": "block",
+            "color": "blue",
+            "position": [
+              -0.019552014197799634,
+              -0.6115869237055824,
+              0.0209893633557113
+            ]
+          },
+          {
+            "name": "green block",
+            "type": "block",
+            "color": "green",
+            "position": [
+              -0.10356987769493761,
+              -0.38717731367254815,
+              0.0209893633557113
+            ]
+          },
+          {
+            "name": "red block",
+            "type": "block",
+            "color": "red",
+            "position": [
+              0.1244367161880999,
+              -0.5396796418299722,
+              0.0209893633557113
+            ]
+          }
+        ],
+        "object_names": [
+          "blue block",
+          "green block",
+          "red block"
+        ]
+      },
+      "failure_mode": "movement_failure",
+      "failure_step": 2,
+      "return_code": 0,
+      "process_success": true,
+      "initial_plan_valid": true,
+      "initial_steps": 2,
+      "completed_steps": 1,
+      "failure_occurred": true,
+      "replanning_used": false,
+      "recovery_attempted": false,
+      "task_success": false,
+      "json_result_available": true,
+      "grasp_success": true,
+      "movement_success": false,
+      "placement_success": false,
+      "placement_xy_error": 0.2745417058467865,
+      "lift_height": 0.2006460428237915,
+      "pick_displacement": 0.002385915955528617
+    },
+    {
+      "condition": "replanning",
+      "experiment_seed": 100,
+      "initial_world_state": {
+        "objects": [
+          {
+            "name": "blue block",
+            "type": "block",
+            "color": "blue",
+            "position": [
+              0.01736093742063339,
+              -0.5886481357684182,
+              0.020989363355711305
+            ]
+          },
+          {
+            "name": "green block",
+            "type": "block",
+            "color": "green",
+            "position": [
+              -0.030194006289932202,
+              -0.3620854271521624,
+              0.0209893633557113
+            ]
+          },
+          {
+            "name": "red block",
+            "type": "block",
+            "color": "red",
+            "position": [
+              -0.19811351354012205,
+              -0.6513681961169289,
+              0.0209893633557113
+            ]
+          }
+        ],
+        "object_names": [
+          "blue block",
+          "green block",
+          "red block"
+        ]
+      },
+      "failure_mode": "grasp_failure",
+      "failure_step": 2,
+      "return_code": 0,
+      "process_success": true,
+      "initial_plan_valid": true,
+      "initial_steps": 2,
+      "completed_steps": 2,
+      "failure_occurred": true,
+      "replanning_used": true,
+      "replan_valid": true,
+      "recovery_attempted": true,
+      "recovery_success": true,
+      "task_success": true,
+      "replanning_attempts": 1,
+      "json_result_available": true,
+      "grasp_success": true,
+      "movement_success": true,
+      "placement_success": true,
+      "placement_xy_error": 0.0017494402127340436,
+      "lift_height": 0.2026328295469284,
+      "pick_displacement": 0.32749253511428833
+    },
+    {
+      "condition": "replanning",
+      "experiment_seed": 200,
+      "initial_world_state": {
+        "objects": [
+          {
+            "name": "blue block",
+            "type": "block",
+            "color": "blue",
+            "position": [
+              0.1790518785010843,
+              -0.6093769026866006,
+              0.020989363355711305
+            ]
+          },
+          {
+            "name": "green block",
+            "type": "block",
+            "color": "green",
+            "position": [
+              0.03776702155580814,
+              -0.5286723924746561,
+              0.020989363355711305
+            ]
+          },
+          {
+            "name": "red block",
+            "type": "block",
+            "color": "red",
+            "position": [
+              -0.05703157315740294,
+              -0.3361179484000262,
+              0.0209893633557113
+            ]
+          }
+        ],
+        "object_names": [
+          "blue block",
+          "green block",
+          "red block"
+        ]
+      },
+      "failure_mode": "placement_failure",
+      "failure_step": 2,
+      "return_code": 0,
+      "process_success": true,
+      "initial_plan_valid": true,
+      "initial_steps": 2,
+      "completed_steps": 2,
+      "failure_occurred": true,
+      "replanning_used": true,
+      "replan_valid": true,
+      "recovery_attempted": true,
+      "recovery_success": true,
+      "task_success": true,
+      "replanning_attempts": 1,
+      "json_result_available": true,
+      "grasp_success": true,
+      "movement_success": true,
+      "placement_success": true,
+      "placement_xy_error": 0.005155667662620544,
+      "lift_height": 0.20279638469219208,
+      "pick_displacement": 0.2294355183839798
+    },
+    {
+      "condition": "replanning",
+      "experiment_seed": 300,
+      "initial_world_state": {
+        "objects": [
+          {
+            "name": "blue block",
+            "type": "block",
+            "color": "blue",
+            "position": [
+              -0.019552014197799634,
+              -0.6115869237055824,
+              0.0209893633557113
+            ]
+          },
+          {
+            "name": "green block",
+            "type": "block",
+            "color": "green",
+            "position": [
+              -0.10356987769493761,
+              -0.38717731367254815,
+              0.0209893633557113
+            ]
+          },
+          {
+            "name": "red block",
+            "type": "block",
+            "color": "red",
+            "position": [
+              0.1244367161880999,
+              -0.5396796418299722,
+              0.0209893633557113
+            ]
+          }
+        ],
+        "object_names": [
+          "blue block",
+          "green block",
+          "red block"
+        ]
+      },
+      "failure_mode": "movement_failure",
+      "failure_step": 2,
+      "return_code": 0,
+      "process_success": true,
+      "initial_plan_valid": true,
+      "initial_steps": 2,
+      "completed_steps": 2,
+      "failure_occurred": true,
+      "replanning_used": true,
+      "replan_valid": true,
+      "recovery_attempted": true,
+      "recovery_success": true,
+      "task_success": true,
+      "replanning_attempts": 1,
+      "json_result_available": true,
+      "grasp_success": true,
+      "movement_success": true,
+      "placement_success": true,
+      "placement_xy_error": 0.0031191052403301,
+      "lift_height": 0.20066992938518524,
+      "pick_displacement": 0.2858121991157532
+    }
+  ]
+}
